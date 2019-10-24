@@ -1,10 +1,13 @@
 package yin.deng.dyjsouputils;
 
 import android.app.Activity;
+import android.text.TextUtils;
 
 import org.jsoup.Connection;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
+import org.jsoup.nodes.Element;
+import org.jsoup.select.Elements;
 
 import java.io.IOException;
 import java.security.KeyManagementException;
@@ -291,6 +294,104 @@ public class JsoupUtils {
                 }
             }
         }.start();
+    }
+
+    /**
+     * 标签内通过id和class同时查找元素
+     * @param doc
+     * @param tag
+     * @param className
+     * @param id
+     */
+    public static ParseInfo parseInnerTag(Element doc, String tag, String className, String id){
+        String selectStr="";
+        if(!TextUtils.isEmpty(tag)){
+            selectStr+=tag;
+        }else{
+            LogUtils.i("标签不能为空");
+            return new ParseInfo(true);
+        }
+        if(!TextUtils.isEmpty(className)){
+            selectStr += "[class=" + className + "]";
+        }
+        if(!TextUtils.isEmpty(id)){
+            if(TextUtils.isEmpty(className)){
+                selectStr+="[id="+id+"]";
+            }else{
+                selectStr+=tag+"[id="+id+"]";
+            }
+        }
+        Elements elements=doc.select(selectStr);
+        ParseInfo parseInfo=new ParseInfo(elements);
+        if(elements==null||elements.size()==0){
+            parseInfo.setEmpty(true);
+        }
+        return parseInfo;
+    }
+
+
+    /**
+     * 直接通过Id查找元素
+     * @param doc
+     * @param id
+     */
+    public static ParseInfo parseById(Element doc,String id){
+        String selectStr="";
+        if(!TextUtils.isEmpty(id)){
+            selectStr+="#"+id;
+        }else{
+            LogUtils.i("标签不能为空");
+            return new ParseInfo(true);
+        }
+        Elements elements=doc.select(selectStr);
+        ParseInfo parseInfo=new ParseInfo(elements);
+        if(elements==null||elements.size()==0){
+            parseInfo.setEmpty(true);
+        }
+        return parseInfo;
+    }
+
+    /**
+     * 直接通过ClassName查找元素
+     * @param doc
+     * @param className
+     */
+    public static ParseInfo parseByClassName(Element doc,String className){
+        String selectStr="";
+        if(!TextUtils.isEmpty(className)){
+            selectStr+="."+className;
+        }else{
+            LogUtils.i("标签不能为空");
+            return new ParseInfo(true);
+        }
+        Elements elements=doc.select(selectStr);
+        ParseInfo parseInfo=new ParseInfo(elements);
+        if(elements==null||elements.size()==0){
+            parseInfo.setEmpty(true);
+        }
+        return parseInfo;
+    }
+
+    /**
+     * 直接通过标签中文本包含的内容查找元素
+     * @param doc
+     * @param tagName
+     */
+    public static ParseInfo parseByTagContiansTxt(Element doc,String tagName,String containsStr){
+        String selectStr="";
+        if(!TextUtils.isEmpty(tagName)){
+            selectStr+=tagName;
+        }else{
+            LogUtils.i("标签不能为空");
+            return new ParseInfo(true);
+        }
+        selectStr=selectStr+":contains("+containsStr+")";
+        Elements elements=doc.select(selectStr);
+        ParseInfo parseInfo=new ParseInfo(elements);
+        if(elements==null||elements.size()==0){
+            parseInfo.setEmpty(true);
+        }
+        return parseInfo;
     }
 
 
