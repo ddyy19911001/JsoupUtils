@@ -14,6 +14,8 @@ import java.security.KeyManagementException;
 import java.security.NoSuchAlgorithmException;
 import java.security.cert.X509Certificate;
 import java.util.List;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 
 import javax.net.ssl.HostnameVerifier;
 import javax.net.ssl.HttpsURLConnection;
@@ -25,11 +27,28 @@ import javax.net.ssl.X509TrustManager;
 
 public class JsoupUtils {
     public static  int TIME_OUT_SECONDE=12000;
+    public static ExecutorService executorService;
+    public static int threadCounts=5;
 
     public interface OnDataGetListener{
         void onGetData(Document data);
         void onErro(String erro);
     }
+
+    public static void closeExecutorService(){
+        if(executorService!=null&&!executorService.isShutdown()){
+            executorService.shutdownNow();
+            executorService=null;
+        }
+    }
+
+    public static void closeExecutorServiceAsyc(){
+        if(executorService!=null&&!executorService.isShutdown()){
+            executorService.shutdown();
+            executorService=null;
+        }
+    }
+
 
     //是否开启证书验证，关闭之后可请求https免证书
     public static void isValidateTLSCertificates(boolean isEnable){
@@ -75,7 +94,10 @@ public class JsoupUtils {
 
     public static void getHtmlDoctment(final Activity context, final String requestUrl, final boolean isGet
             , final List<JsoupParams> heads, final List<JsoupParams> bodys, final OnDataGetListener onDataGetListener){
-        new Thread(){
+        if(executorService==null){
+            executorService= Executors.newFixedThreadPool(threadCounts);
+        }
+        executorService.execute(new Runnable() {
             @Override
             public void run() {
                 try {
@@ -124,13 +146,16 @@ public class JsoupUtils {
                     }
                 }
             }
-        }.start();
+        });
     }
 
 
     public static void getHtmlDoctmentNeedParams(final Activity context, final String requestUrl
             , final List<JsoupParams> bodys, final OnDataGetListener onDataGetListener){
-        new Thread(){
+        if(executorService==null){
+            executorService= Executors.newFixedThreadPool(threadCounts);
+        }
+        executorService.execute(new Runnable() {
             @Override
             public void run() {
                 try {
@@ -167,11 +192,14 @@ public class JsoupUtils {
                     }
                 }
             }
-        }.start();
+        });
     }
 
     public static void getHtmlDoctmentNoParams(final Activity context, final String requestUrl, final OnDataGetListener onDataGetListener){
-        new Thread(){
+        if(executorService==null){
+            executorService= Executors.newFixedThreadPool(threadCounts);
+        }
+        executorService.execute(new Runnable() {
             @Override
             public void run() {
                 try {
@@ -200,13 +228,16 @@ public class JsoupUtils {
                     }
                 }
             }
-        }.start();
+        });
     }
 
 
     public static void getHtmlDoctmentNeedParams(final Activity context, final String requestUrl, final boolean isGet
             , final List<JsoupParams> bodys, final OnDataGetListener onDataGetListener){
-        new Thread(){
+        if(executorService==null){
+            executorService= Executors.newFixedThreadPool(threadCounts);
+        }
+        executorService.execute(new Runnable() {
             @Override
             public void run() {
                 try {
@@ -247,12 +278,15 @@ public class JsoupUtils {
                     }
                 }
             }
-        }.start();
+        });
     }
 
     public static void getHtmlDoctmentNeedHeaders(final Activity context, final String requestUrl, final boolean isGet
             , final List<JsoupParams> heads, final OnDataGetListener onDataGetListener){
-        new Thread(){
+        if(executorService==null){
+            executorService= Executors.newFixedThreadPool(threadCounts);
+        }
+        executorService.execute(new Runnable() {
             @Override
             public void run() {
                 try {
@@ -293,7 +327,7 @@ public class JsoupUtils {
                     }
                 }
             }
-        }.start();
+        });
     }
 
     /**
