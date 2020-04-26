@@ -101,7 +101,7 @@ public class JsoupUtils {
             @Override
             public void run() {
                 try {
-                    Connection connection = Jsoup.connect(requestUrl);
+                    Connection connection = Jsoup.connect(requestUrl).followRedirects(true);
                     connection.timeout(TIME_OUT_SECONDE);
                     if(!MyUtils.isEmpty(heads)){
                         for(int i=0;i<heads.size();i++){
@@ -158,7 +158,7 @@ public class JsoupUtils {
             @Override
             public void run() {
                 try {
-                    Connection connection = Jsoup.connect(requestUrl);
+                    Connection connection = Jsoup.connect(requestUrl).followRedirects(true);
                     connection.timeout(TIME_OUT_SECONDE);
                     if(!MyUtils.isEmpty(bodys)){
                         for(int i=0;i<bodys.size();i++){
@@ -201,7 +201,7 @@ public class JsoupUtils {
             @Override
             public void run() {
                 try {
-                    Connection connection = Jsoup.connect(requestUrl);
+                    Connection connection = Jsoup.connect(requestUrl).followRedirects(true);
                     connection.timeout(TIME_OUT_SECONDE);
                     final Document document;
                     document=connection.get();
@@ -238,7 +238,7 @@ public class JsoupUtils {
             @Override
             public void run() {
                 try {
-                    Connection connection = Jsoup.connect(requestUrl);
+                    Connection connection = Jsoup.connect(requestUrl).followRedirects(true);
                     connection.timeout(TIME_OUT_SECONDE);
                     if(!MyUtils.isEmpty(bodys)){
                         for(int i=0;i<bodys.size();i++){
@@ -286,7 +286,7 @@ public class JsoupUtils {
             @Override
             public void run() {
                 try {
-                    Connection connection = Jsoup.connect(requestUrl);
+                    Connection connection = Jsoup.connect(requestUrl).followRedirects(true);
                     connection.timeout(TIME_OUT_SECONDE);
                     if(!MyUtils.isEmpty(heads)){
                         for(int i=0;i<heads.size();i++){
